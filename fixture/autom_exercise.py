@@ -1,19 +1,19 @@
-import time
-
 from fixture.step import StepHelper
-from helpers.telegramBotHelper import TelegramBotHelper
 
 
 class AutomExercise:
 
-    telegramBot = TelegramBotHelper()
-
+    test_cases_button = "//div[@class='item active']//a[@class='test_cases_list']"
     automation_experience_text = "(//div[@class='col-sm-6']/h1)[1]"
     login_signup_button = "a[href='/login'] i"
     new_user_sign_up_text = "div[class='signup-form'] h2"
+    login_to_your_account_text = "div[class='login-form'] h2"
     sign_up_name_field = "input[data-qa='signup-name']"
     sign_up_email_field = "input[data-qa='signup-email']"
+    enter_login_email_address = "input[data-qa='login-email']"
+    enter_login_password = "input[data-qa='login-password']"
     sign_up_button = "button[data-qa='signup-button']"
+    login_button = "button[data-qa='login-button']"
     enter_account_information_text = "//b[text()='Enter Account Information']"
     title_mr_selector = "input[name='title'][value='Mr']"
     title_mrs_selector = "input[name='title'][value='Mrs']"
@@ -41,6 +41,8 @@ class AutomExercise:
     logged_in_text_selector = "//i[@class='fa fa-user']/parent::a"
     delete_account_button_selector = "//a[contains(text(), 'Delete Account')]"
     account_deleted_text = "h2[data-qa='account-deleted'] b"
+    your_email_or_password_is_incorrect_text = "div[class='login-form'] p"
+    log_out_button = "//a[contains(text(), 'Logout')]"
 
     def __init__(self, app):
         self.app = app
@@ -50,9 +52,20 @@ class AutomExercise:
     def get_enter_account_information_text(self):
         return self.step.get_element_text(self.enter_account_information_text)
 
+    def click_on_test_cases_button(self):
+        self.step.click_on_element(self.test_cases_button)
+
     def set_sign_up_name_and_email(self, name, email):
         self.step.input_text(self.sign_up_name_field, name)
         self.step.input_text(self.sign_up_email_field, email)
+
+    def enter_correct_email_and_password(self, email, password):
+        self.step.input_text(self.enter_login_email_address, email)
+        self.step.input_text(self.enter_login_password, password)
+
+    def enter_incorrect_email_and_password(self, email, password):
+        self.step.input_text(self.enter_login_email_address, email)
+        self.step.input_text(self.enter_login_password, password)
 
     def click_sign_up_button(self):
         self.step.click_on_element(self.sign_up_button)
@@ -66,8 +79,14 @@ class AutomExercise:
     def get_new_user_sign_up_text(self):
         return self.step.get_element_text(self.new_user_sign_up_text)
 
+    def get_login_to_your_account_text(self):
+        return self.step.get_element_text(self.login_to_your_account_text)
+
     def click_login_signup_button(self):
         self.step.click_on_element(self.login_signup_button)
+
+    def click_login_button(self):
+        self.step.click_on_element(self.login_button)
 
     def fill_account_information(self, title, name, password, dob):
         title_locator = self.title_mr_selector if title == 'Mr' else self.title_mrs_selector
@@ -99,6 +118,9 @@ class AutomExercise:
     def create_account(self):
         self.step.click_on_element(self.create_account_button_selector)
 
+    def click_logout(self):
+        self.step.click_on_element(self.log_out_button)
+
     def verify_account_created(self):
         return self.step.get_element_text(self.account_created_text_selector)
 
@@ -113,3 +135,6 @@ class AutomExercise:
 
     def verify_account_deleted(self):
         return self.step.get_element_text(self.account_deleted_text)
+
+    def verifi_your_email_or_password_is_incorrect(self):
+        return self.step.get_element_text(self.your_email_or_password_is_incorrect_text)
