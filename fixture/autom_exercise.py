@@ -43,6 +43,7 @@ class AutomExercise:
     account_deleted_text = "h2[data-qa='account-deleted'] b"
     your_email_or_password_is_incorrect_text = "div[class='login-form'] p"
     log_out_button = "//a[contains(text(), 'Logout')]"
+    email_address_already_exist_text = "div[class='signup-form'] p"
 
     def __init__(self, app):
         self.app = app
@@ -62,6 +63,10 @@ class AutomExercise:
     def enter_correct_email_and_password(self, email, password):
         self.step.input_text(self.enter_login_email_address, email)
         self.step.input_text(self.enter_login_password, password)
+
+    def verify_that_user_is_navigated_to_login_page(self):
+        self.step.specified_element_is_present(self.enter_login_email_address)
+        self.step.specified_element_is_present(self.enter_login_password)
 
     def enter_incorrect_email_and_password(self, email, password):
         self.step.input_text(self.enter_login_email_address, email)
@@ -136,5 +141,8 @@ class AutomExercise:
     def verify_account_deleted(self):
         return self.step.get_element_text(self.account_deleted_text)
 
-    def verifi_your_email_or_password_is_incorrect(self):
+    def get_your_email_or_password_is_incorrect(self):
         return self.step.get_element_text(self.your_email_or_password_is_incorrect_text)
+
+    def get_email_address_already_exist(self):
+        return self.step.get_element_text(self.email_address_already_exist_text)
