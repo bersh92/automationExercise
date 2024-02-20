@@ -87,3 +87,13 @@ class StepHelper:
         dropdown = WebDriverWait(self.wd, 10).until(
             EC.visibility_of_element_located((self.get_how(locator), locator)))
         Select(dropdown).select_by_visible_text(text)
+
+    def get_elements_texts(self, locator):
+        WebDriverWait(self.wd, 10).until(
+            EC.presence_of_all_elements_located((self.get_how(locator), locator)))
+        elements = self.wd.find_elements(self.get_how(locator), locator)
+        texts = []
+        for element in elements:
+            text = element.text.strip()
+            texts.append(text)
+        return texts
