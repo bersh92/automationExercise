@@ -1,3 +1,11 @@
+import os
+
+from selenium.common import TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+
 from fixture.step import StepHelper
 
 
@@ -44,6 +52,27 @@ class AutomExercise:
     your_email_or_password_is_incorrect_text = "div[class='login-form'] p"
     log_out_button = "//a[contains(text(), 'Logout')]"
     email_address_already_exist_text = "div[class='signup-form'] p"
+    contact_us_button = "a[href='/contact_us'] i"
+    get_in_touch_text = "div[class='contact-form'] h2"
+    contact_us_get_in_touch_name_field = "input[data-qa='name']"
+    contact_us_get_in_touch_email_field = "input[data-qa='email']"
+    contact_us_get_in_touch_subject_field = "input[data-qa='subject']"
+    contact_us_get_in_touch_message_field = "textarea[data-qa='message']"
+    upload_file_selector = "input[name='upload_file']"
+    submit_button = 'input[data-qa="submit-button"]'
+    success_your_details_have_been_submitted_successfully_text = "div[class='status alert alert-success']"
+    home_button = 'a[class="btn btn-success"] span'
+    test_cases_text = 'div[class="col-sm-9 col-sm-offset-1"] b'
+    products_button = 'a[href="/products"] i'
+    all_products_text = 'h2[class="title text-center"]'
+    products_list = 'div[class="productinfo text-center"] p'
+    view_product_first = 'a[href="/product_details/1"]'
+    product_name_text = 'div[class="product-information"] h2'
+    product_category_text = '(//div[@class="product-information"]/p) [1]'
+    product_price_text = 'div[class="product-information"] span span'
+    product_availability_text = '(//div[@class="product-information"]/p) [2]'
+    product_condition_text = '(//div[@class="product-information"]/p) [3]'
+    product_brand_text = '(//div[@class="product-information"]/p) [4]'
 
     def __init__(self, app):
         self.app = app
@@ -146,3 +175,75 @@ class AutomExercise:
 
     def get_email_address_already_exist(self):
         return self.step.get_element_text(self.email_address_already_exist_text)
+
+    def click_on_contact_us_button(self):
+        self.step.click_on_element(self.contact_us_button)
+
+    def get_get_in_touch_text(self):
+        return self.step.get_element_text(self.get_in_touch_text)
+
+    def set_contact_us_get_in_touch_name_email_subject_and_message(self, name, email, subject, message):
+        self.step.input_text(self.contact_us_get_in_touch_name_field,name)
+        self.step.input_text(self.contact_us_get_in_touch_email_field, email)
+        self.step.input_text(self.contact_us_get_in_touch_subject_field, subject)
+        self.step.input_text(self.contact_us_get_in_touch_message_field, message)
+
+    def upload_the_file(self):
+        file_input = self.wd.find_element(By.CSS_SELECTOR, self.upload_file_selector)
+        root_directory = os.path.dirname(os.path.dirname(__file__)) # Navigate up to the root from 'test'
+        file_path = os.path.join(root_directory, "file_to_upload.txt")
+        file_input.send_keys(file_path)
+
+    def click_submit_button(self):
+        self.step.click_on_element(self.submit_button)
+
+    def confirm_upload(self):
+        timeout = 10
+        try:
+            WebDriverWait(self.wd, timeout).until(EC.alert_is_present())
+            alert = self.wd.switch_to.alert
+            alert.accept()
+        except TimeoutException:
+            print("No alert was present after {} seconds".format(timeout))
+
+    def get_success_your_details_have_been_submitted_successfully_text(self):
+        return self.step.get_element_text(self.success_your_details_have_been_submitted_successfully_text)
+
+    def click_home_button(self):
+        self.step.click_on_element(self.home_button)
+
+    def verify_that_landed_to_home_page_successfully(self):
+        self.step.specified_element_is_present(self.automation_experience_text)
+
+    def verify_user_is_navigated_to_test_cases_page_successfully(self):
+        self.step.specified_element_is_present(self.test_cases_text)
+
+    def click_on_products_button(self):
+        self.step.click_on_element(self.products_button)
+
+    def verify_user_is_navigated_to_all_products_page_successfully(self):
+        self.step.specified_element_is_present(self.all_products_text)
+
+    def get_products_names(self):
+        return self.step.get_elements_texts(self.products_list)
+
+    def click_on_view_product_of_first_product(self):
+        self.step.click_on_element(self.view_product_first)
+
+    def get_product_name(self):
+        return self.step.get_element_text(self.product_name_text)
+
+    def get_product_category(self):
+        return self.step.get_element_text(self.product_category_text)
+
+    def get_product_price(self):
+        return self.step.get_element_text(self.product_price_text)
+
+    def get_product_availability(self):
+        return self.step.get_element_text(self.product_availability_text)
+
+    def get_product_condition(self):
+        return self.step.get_element_text(self.product_condition_text)
+
+    def get_product_brand(self):
+        return self.step.get_element_text(self.product_brand_text)

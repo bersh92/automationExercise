@@ -23,7 +23,7 @@ class Application:
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-notifications")
         chrome_options.add_argument("user-agent='User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36'")
-        self.wd = webdriver.Chrome(service=service, options=chrome_options)
+        self.wd: webdriver = webdriver.Chrome(service=service, options=chrome_options)
         self.wd.get_window_size('1920,1080')
 
         self.assert_that = assert_that

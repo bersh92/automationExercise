@@ -92,8 +92,11 @@ class StepHelper:
         WebDriverWait(self.wd, 10).until(
             EC.presence_of_all_elements_located((self.get_how(locator), locator)))
         elements = self.wd.find_elements(self.get_how(locator), locator)
+        time.sleep(1)
         texts = []
         for element in elements:
+            self.wd.execute_script(
+                "arguments[0].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });", element)
             text = element.text.strip()
             texts.append(text)
         return texts
