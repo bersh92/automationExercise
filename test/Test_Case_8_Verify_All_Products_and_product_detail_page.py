@@ -5,7 +5,7 @@ def test_case_8_verify_all_products_and_product_detail_page(app):
     app.assert_that(app.automExercise.get_automation_experience_text()).is_equal_to("AutomationExercise")
     app.automExercise.click_on_products_button()
     app.automExercise.verify_user_is_navigated_to_all_products_page_successfully()
-    # app.assert_that(app.automExercise.get_products_names()).is_equal_to(list_of_products)
+    app.assert_that(app.automExercise.get_products_names().sort()).is_equal_to(list_of_products.sort())
     app.automExercise.click_on_view_product_of_first_product()
     app.assert_that(app.automExercise.get_product_name()).is_equal_to("Blue Top")
     app.assert_that(app.automExercise.get_product_category()).is_equal_to("Category: Women > Tops")
