@@ -1,6 +1,6 @@
 import time
 
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -32,6 +32,7 @@ class StepHelper:
         return True
 
     def click_on_element(self, locator, scrollInToView = False):
+        self.close_popup_if_present()
         WebDriverWait(self.wd, 10).until(
             EC.visibility_of_element_located((self.get_how(locator), locator)))
         element = WebDriverWait(self.wd, 10).until(
@@ -56,6 +57,7 @@ class StepHelper:
         return self.wd.find_elements(by=by, value=locator)
 
     def get_element_text(self, locator, scrollInToView = False):
+        self.close_popup_if_present()
         element = WebDriverWait(self.wd, 10).until(
             EC.visibility_of_element_located((self.get_how(locator), locator)))
         if scrollInToView:
@@ -101,33 +103,48 @@ class StepHelper:
             texts.append(text)
         return texts
 
-    def close_popup_if_present(self, popup_locator, timeout=1.2):
-        """
-        This method checks for popups inside known iframes and closes them if present.
-        :param popup_locator: The CSS selector or XPATH of the popup's dismiss button within the iframes.
-        :param timeout: The maximum time to wait for the popup to appear.
-        """
-        # List of known iframe IDs to check for popups
-        known_iframe_ids = ["iframe[id*='aswift'][style*='visibility: visible']", 'iframe[id="ad_iframe"]']  # Add other iframe IDs as needed
+    def close_popup_if_present(self, timeout=5):
+        original_window = self.wd.current_window_handle
 
-        for iframe_id in known_iframe_ids:
-            try:
-                # Switch to the iframe by ID
-                WebDriverWait(self.wd, timeout).until(EC.frame_to_be_available_and_switch_to_it((By.CSS_SELECTOR, iframe_id)))
+        def close_button_in_iframes(iframes, current_depth=0, max_depth=5):
+            """Recursively search for the close button within nested iframes."""
+            if current_depth > max_depth:
+                return False
 
-                # Wait for the popup dismiss button to appear inside the iframe
-                dismiss_button = WebDriverWait(self.wd, timeout).until(
-                    EC.element_to_be_clickable((By.CSS_SELECTOR, popup_locator))
-                )
-                # Click the dismiss button to close the popup
-                dismiss_button.click()
-                print(f"Popup dismissed in iframe {iframe_id}.")
-            except TimeoutException:
-                # If the dismiss button is not found within the timeout, move on to the next iframe
-                print(f"No popup was present in iframe {iframe_id}.")
-            finally:
-                # Always switch back to the default content before trying the next iframe
-                self.wd.switch_to.default_content()
+            for iframe in iframes:
+                try:
+                    self.wd.switch_to.frame(iframe)
+                    # Adjusted XPath to include button, span, and div with specific IDs
+                    button = self.wd.find_elements(By.XPATH,
+                                                   "//button[contains(text(), 'Close')] | //span[contains(text(), 'Close')] | //div[contains(@id, 'dismiss-button')] | //span[contains(@id, 'dismiss-button')]")
+                    if button and button[0].is_displayed():
+                        button[0].click()
+                        print("Popup closed within nested iframe.")
+                        return True
+
+                    # Search for nested iframes recursively
+                    nested_iframes = self.wd.find_elements(By.TAG_NAME, 'iframe')
+                    if nested_iframes and close_button_in_iframes(nested_iframes, current_depth + 1, max_depth):
+                        return True
+
+                except Exception as e:
+                    print(f"An error occurred: {e}")
+                finally:
+                    self.wd.switch_to.parent_frame()
+
+            return False
+
+        iframes = self.wd.find_elements(By.TAG_NAME, 'iframe')
+        if not iframes:
+            print("No iframes found. Popup might not be present.")
+            return False
+
+        if not close_button_in_iframes(iframes):
+            print("Failed to close the popup after searching all iframes.")
+            return False
+
+        self.wd.switch_to.window(original_window)
+        return True
 
     def scroll_page(self, direction):
         if direction == "top":
