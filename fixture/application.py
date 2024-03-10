@@ -12,13 +12,11 @@ from helpers.utils import Utils
 
 class Application:
 
-    def __init__(self):
+    def __init__(self, headless=False):
         service = Service()
         chrome_options = webdriver.ChromeOptions()
-        # chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-        # chrome_options.add_argument("--incognito")
-        # chrome_options.add_extension("/Users/oleksandr.korsun/Desktop/ext_dir/1.zip")
-        # chrome_options.add_argument("--headless")
+        if headless:
+            chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-notifications")
