@@ -128,3 +128,13 @@ class StepHelper:
             finally:
                 # Always switch back to the default content before trying the next iframe
                 self.wd.switch_to.default_content()
+
+    def scroll_page(self, direction):
+        if direction == "top":
+            self.wd.execute_script("window.scrollTo(0, 0);")
+        elif direction == "middle":
+            self.wd.execute_script("window.scrollTo(0, document.body.scrollHeight / 2);")
+        elif direction == "bottom":
+            self.wd.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        else:
+            print("Invalid direction. Use 'top', 'bottom', or 'middle'.")

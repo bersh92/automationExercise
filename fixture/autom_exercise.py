@@ -72,6 +72,34 @@ class AutomExercise:
     product_condition_text = '(//div[@class="product-information"]/p) [3]'
     product_brand_text = '(//div[@class="product-information"]/p) [4]'
     pop_up = "div[id='dismiss-button']"
+    search_product = 'input[type="text"]'
+    search_button = 'button[type="button"] i'
+    list_search_products = 'div[class="productinfo text-center"] p'
+    subscription_text = 'div[class="single-widget"] h2'
+    subscription_input_email_address = 'input[type="email"]'
+    subscription_arrow_button = 'button[type="submit"] i'
+    success_message_subscribed_text = 'div[class="alert-success alert"]'
+    cart_button = 'a[href="/view_cart"] i'
+    add_to_cart_first_product = '(//div[@class="productinfo text-center"]//a//i) [1]'
+    continue_shopping_button = 'button[class="btn btn-success close-modal btn-block"]'
+    add_to_cart_second_product = '(//div[@class="productinfo text-center"]//a//i) [2]'
+    view_cart_button = 'a[href="/view_cart"] u'
+    list_products_are_added_to_cart_text = '//div[@class="table-responsive cart_info"]//h4//a'
+    view_product_third = 'a[href="/product_details/3"]'
+    inp_quantity = 'input[id="quantity"]'
+    add_to_cart_button = 'button[type="button"] i'
+    add_to_cart_third_product = '(//div[@class="productinfo text-center"]//a//i) [3]'
+    proceed_to_checkout = 'a[class="btn btn-default check_out"]'
+    register_login_button = 'div[class="modal-body"] u'
+    comment_text_area = 'textarea[class="form-control"]'
+    place_order_button = 'a[href="/payment"]'
+    name_card_input_selector = 'input[name="name_on_card"]'
+    number_card_input_selector = 'input[name="card_number"]'
+    cvc_card_input_selector = 'input[name="cvc"]'
+    expiration_date_card_month_input_selector = 'input[name="expiry_month"]'
+    expiration_date_card_year_input_selector = 'input[name="expiry_year"]'
+    pay_and_confirm_order_button = 'button[data-qa="pay-button"]'
+    success_message_your_order_has_been_placed_successfully_text = 'div[id="success_message"] div'
 
     def __init__(self, app):
         self.app = app
@@ -135,11 +163,17 @@ class AutomExercise:
 
     def fill_account_information(self, title, name, password, dob):
         self.step.close_popup_if_present(self.pop_up)
-        title_locator = self.title_mr_selector if title == 'Mr' else self.title_mrs_selector
+        if title == 'Mr':
+            title_locator = self.title_mr_selector
+        else:
+            title_locator = self.title_mrs_selector
         self.step.click_on_element(title_locator)
         self.step.input_text(self.name_input_selector, name)
         self.step.input_text(self.password_input_selector, password)
-        day, month, year = dob.split('/')
+        split_string = dob.split('/')
+        day = split_string[0]
+        month = split_string[1]
+        year = split_string[2]
         self.step.select_dropdown_by_value(self.day_selector, day)
         self.step.select_dropdown_by_value(self.month_selector, month)
         self.step.select_dropdown_by_value(self.year_selector, year)
@@ -219,6 +253,7 @@ class AutomExercise:
         file_input = self.wd.find_element(By.CSS_SELECTOR, self.upload_file_selector)
         root_directory = os.path.dirname(os.path.dirname(__file__))  # Navigate up to the root from 'test'
         file_path = os.path.join(root_directory, "file_to_upload.txt")
+        self.step.close_popup_if_present(self.pop_up)
         file_input.send_keys(file_path)
 
     def click_submit_button(self):
@@ -290,3 +325,158 @@ class AutomExercise:
     def get_product_brand(self):
         self.step.close_popup_if_present(self.pop_up)
         return self.step.get_element_text(self.product_brand_text)
+
+    def enter_product_name_in_search_input(self, search):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.input_text(self.search_product, search)
+
+    def click_search_button(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.search_button)
+
+    def get_all_product_names_related_to_search_are_visible(self):
+        self.step.close_popup_if_present(self.pop_up)
+        return self.step.get_elements_texts(self.list_search_products)
+
+    def get_subscription_text(self):
+        self.step.close_popup_if_present(self.pop_up)
+        return self.step.get_element_text(self.subscription_text)
+
+    def enter_email_address_in_input(self, email):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.input_text(self.subscription_input_email_address, email)
+
+    def click_arrow_button_subscription(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.subscription_arrow_button, True)
+
+    def get_success_message_subscribed(self):
+        return self.step.get_element_text(self.success_message_subscribed_text)
+
+    def click_cart_button(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.cart_button)
+
+    def click_add_to_cart_on_first_product(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.add_to_cart_first_product, True)
+
+    def click_continue_shopping_button(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.continue_shopping_button)
+
+    def click_add_to_cart_on_second_product(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.add_to_cart_second_product, True)
+
+    def click_view_cart_button(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.view_cart_button)
+
+    def get_names_products_are_added_to_cart(self):
+        self.step.close_popup_if_present(self.pop_up)
+        return self.step.get_elements_texts(self.list_products_are_added_to_cart_text)
+
+    def get_product_data(self, product_id):
+        title = self.step.get_element_text(f'tr[id="product-{product_id}"] h4')
+        price = self.step.get_element_text(f'tr[id="product-{product_id}"] td[class="cart_price"] p')
+        quantity = self.step.get_element_text(f'tr[id="product-{product_id}"] td[class="cart_quantity"] button')
+        total_price = self.step.get_element_text(f'tr[id="product-{product_id}"]  td[class="cart_total"] p')
+        product = {
+            "title": title,
+            "price": price,
+            "quantity": quantity,
+            "total_price": total_price
+        }
+        return product
+
+    def click_on_view_product_of_third_product(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.view_product_third, True)
+
+    def get_product_detail_is_opened(self):
+        name_product = self.step.get_element_text('div[class="product-information"] h2')
+        category = self.step.get_element_text('(//div[@class="product-information"]/p) [1]')
+        price = self.step.get_element_text('div[class="product-information"] span span')
+        brand = self.step.get_element_text('(//div[@class="product-information"]/p) [4]')
+        product = {
+            "name_product": name_product,
+            "category": category,
+            "price": price,
+            "brand": brand
+        }
+        return product
+
+    def input_quantity(self, quantity):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.input_text(self.inp_quantity, quantity)
+
+    def click_add_to_cart_button(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.add_to_cart_button)
+
+    def click_add_to_cart_on_third_product(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.add_to_cart_third_product, True)
+
+    def click_proceed_to_checkout(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.proceed_to_checkout)
+
+    def click_register_login_button(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.register_login_button)
+
+    def get_details_delivery_address(self):
+        first_and_last_name = self.step.get_element_text('//ul[@class="address item box"]//li[@class="address_firstname address_lastname"]')
+        address = self.step.get_element_text('(//ul[@class="address item box"]//li[@class="address_address1 address_address2"]) [2]')
+        city = self.step.get_element_text('//ul[@class="address item box"]//li[@class="address_city address_state_name address_postcode"]')
+        country = self.step.get_element_text('//ul[@class="address item box"]//li[@class="address_country_name"]')
+        phone = self.step.get_element_text('//ul[@class="address item box"]//li[@class="address_phone"]')
+        delivery_address = {
+            "first_and_last_name": first_and_last_name,
+            "address": address,
+            "city": city,
+            "country": country,
+            "phone": phone
+        }
+        return delivery_address
+
+    def get_details_billing_address(self):
+        first_and_last_name = self.step.get_element_text('//ul[@class="address alternate_item box"]//li[@class="address_firstname address_lastname"]')
+        address = self.step.get_element_text('(//ul[@class="address alternate_item box"]//li[@class="address_address1 address_address2"]) [2]')
+        city = self.step.get_element_text('//ul[@class="address alternate_item box"]//li[@class="address_city address_state_name address_postcode"]')
+        country = self.step.get_element_text('//ul[@class="address alternate_item box"]//li[@class="address_country_name"]')
+        phone = self.step.get_element_text('//ul[@class="address alternate_item box"]//li[@class="address_phone"]')
+        billing_address = {
+            "first_and_last_name": first_and_last_name,
+            "address": address,
+            "city": city,
+            "country": country,
+            "phone": phone
+        }
+        return billing_address
+
+    def input_description_in_comment_text_area(self, text):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.input_text(self.comment_text_area, text)
+
+    def click_place_order_button(self):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.place_order_button, True)
+
+    def fill_payment_details(self, name, number, cvc, month, year):
+        self.step.close_popup_if_present(self.pop_up)
+        self.step.input_text(self.name_card_input_selector, name)
+        self.step.input_text(self.number_card_input_selector, number)
+        self.step.input_text(self.cvc_card_input_selector, cvc)
+        self.step.input_text(self.expiration_date_card_month_input_selector, month)
+        self.step.input_text(self.expiration_date_card_year_input_selector, year)
+
+    def click_pay_and_confirm_order_button(self):
+        #self.step.close_popup_if_present(self.pop_up)
+        self.step.click_on_element(self.pay_and_confirm_order_button)
+
+    def get_success_message_your_order_has_been_placed_successfully(self):
+        #self.step.close_popup_if_present(self.pop_up)
+        return self.step.get_element_text(self.success_message_your_order_has_been_placed_successfully_text)
