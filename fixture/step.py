@@ -56,8 +56,9 @@ class StepHelper:
             EC.presence_of_all_elements_located((self.get_how(locator), locator)))
         return self.wd.find_elements(by=by, value=locator)
 
-    def get_element_text(self, locator, scrollInToView = False):
-        self.close_popup_if_present()
+    def get_element_text(self, locator, scrollInToView = False, closeAdd = True,):
+        if closeAdd:
+            self.close_popup_if_present()
         element = WebDriverWait(self.wd, 10).until(
             EC.visibility_of_element_located((self.get_how(locator), locator)))
         if scrollInToView:

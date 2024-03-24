@@ -1,4 +1,5 @@
 import os
+import time
 
 from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
@@ -99,7 +100,15 @@ class AutomExercise:
     expiration_date_card_month_input_selector = 'input[name="expiry_month"]'
     expiration_date_card_year_input_selector = 'input[name="expiry_year"]'
     pay_and_confirm_order_button = 'button[data-qa="pay-button"]'
-    success_message_your_order_has_been_placed_successfully_text = 'div[id="success_message"] div'
+    success_message_order_text = "//*[contains(text(), 'Your order has been placed successfully!')]"
+    list_categories_text = 'div[class="panel-group category-products"] h4 a'
+    category_women_button = 'a[href="#Women"]'
+    category_women_tops_button = "//a[text()='Tops ']"
+    women_tops_products_text = "// *[contains(text(), 'Women - Tops Products')]"
+    category_men_button = 'a[href="#Men"]'
+    category_men_jeans_button = "//a[text()='Jeans ']"
+    men_jeans_products_text = "// *[contains(text(), 'Men - Jeans Products')]"
+    list_brands_text = 'div[class="brands-name"] li a'
 
     def __init__(self, app):
         self.app = app
@@ -320,6 +329,14 @@ class AutomExercise:
     def get_names_products_are_added_to_cart(self):
         return self.step.get_elements_texts(self.list_products_are_added_to_cart_text)
 
+    def check_product_displaying_in_cart(self, product_name):
+        products_in_cart = self.step.get_elements_texts(self.list_products_are_added_to_cart_text)
+
+        if product_name in products_in_cart:
+            return True
+        else:
+            return False
+
     def get_product_data(self, product_id):
         title = self.step.get_element_text(f'tr[id="product-{product_id}"] h4')
         price = self.step.get_element_text(f'tr[id="product-{product_id}"] td[class="cart_price"] p')
@@ -417,5 +434,42 @@ class AutomExercise:
     def click_pay_and_confirm_order_button(self):
         self.step.click_on_element(self.pay_and_confirm_order_button)
 
-    def get_success_message_your_order_has_been_placed_successfully(self):
-        return self.step.get_element_text(self.success_message_your_order_has_been_placed_successfully_text)
+    def get_success_message_order_text(self):
+        return self.step.get_element_text(self.success_message_order_text)
+
+    def go_back(self):
+        self.wd.back()
+
+    def click_continue_after_account_deleted(self):
+        self.step.click_on_element(self.continue_button_selector)
+
+    def click_x_button_product_from_cart(self, product_id):
+        self.step.click_on_element(f'a[data-product-id="{product_id}"]')
+        time.sleep(2)
+
+    def get_list_categories_text(self):
+        return self.step.get_elements_texts(self.list_categories_text)
+
+    def click_category_women(self):
+        self.step.click_on_element(self.category_women_button, True)
+
+    def click_category_women_tops(self):
+        self.step.click_on_element(self.category_women_tops_button)
+
+    def get_text_women_tops_products(self):
+        return self.step.get_element_text(self.women_tops_products_text)
+
+    def click_category_men_button(self):
+        self.step.click_on_element(self.category_men_button)
+
+    def click_category_men_jeans(self):
+        self.step.click_on_element(self.category_men_jeans_button, True)
+
+    def get_text_men_jeans_products(self):
+        return self.step.get_element_text(self.men_jeans_products_text)
+
+    def get_list_brands_text(self):
+        return self.step.get_elements_texts(self.list_brands_text)
+
+    def click_on_any_brand_name(self, name):
+        self.step.click_on_element(f'a[href="/brand_products/{name}"]', True)
