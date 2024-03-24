@@ -2,6 +2,7 @@ import os
 import shutil
 import random
 import string
+import requests
 
 class Utils:
 
@@ -28,3 +29,33 @@ class Utils:
 
     def getPathToScreenshot(self):
         return self.BASEDIR + "test.png"
+
+    def create_account_with_defaults(email, password):
+        url = "https://automationexercise.com/api/createAccount"
+        payload = {
+            "name": "Default Name",
+            "email": email,
+            "password": password,
+            "title": "Mr",
+            "birth_date": "01",
+            "birth_month": "January",
+            "birth_year": "1990",
+            "firstname": "Default",
+            "lastname": "User",
+            "company": "Default Company",
+            "address1": "123 Default St",
+            "address2": "Suite 100",
+            "country": "United States",
+            "zipcode": "90001",
+            "state": "California",
+            "city": "Los Angeles",
+            "mobile_number": "1234567890"
+        }
+        response = requests.post(url, data=payload)
+
+        if response.status_code == 201 or response.status_code == 200:
+            print("\n!!! User created successfully !!!")
+        else:
+            print("\nFailed to create user. Status Code:", response.status_code)
+            print("\nResponse:", response.text)
+
