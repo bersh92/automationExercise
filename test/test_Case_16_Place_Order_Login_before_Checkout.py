@@ -4,28 +4,16 @@ email = Utils.generate_random_email()
 password = "TestPassword"
 first = {'title': 'Blue Top', 'price': 'Rs. 500', 'quantity': '1', 'total_price': 'Rs. 500'}
 third = {'title': 'Sleeveless Dress', 'price': 'Rs. 1000', 'quantity': '1', 'total_price': 'Rs. 1000'}
-delivery_address = {'first_and_last_name': 'Mr. FirstName LastName', 'address': 'Address', 'city': 'City State 12345',
-                    'country': 'United States', 'phone': '1234567890'}
-billing_address = {'first_and_last_name': 'Mr. FirstName LastName', 'address': 'Address', 'city': 'City State 12345',
-                   'country': 'United States', 'phone': '1234567890'}
+delivery_address = {'first_and_last_name': 'Mr. Default User', 'address': '123 Default St',
+                    'city': 'Los Angeles California 90001', 'country': 'United States', 'phone': '1234567890'}
+billing_address = {'first_and_last_name': 'Mr. Default User', 'address': '123 Default St',
+                   'city': 'Los Angeles California 90001', 'country': 'United States', 'phone': '1234567890'}
 comment_text = "Test shopping"
+name = 'Default Name'
 
 def test_case_16_place_order_login_before_checkout(app):
     # CREATE NEW ACCOUNT
-    app.automExercise.openUrl("https://automationexercise.com/")
-    app.assert_that(app.automExercise.get_automation_experience_text()).is_equal_to('AutomationExercise')
-    app.automExercise.click_login_signup_button()
-    app.assert_that(app.automExercise.get_new_user_sign_up_text()).is_equal_to('New User Signup!')
-    app.automExercise.set_sign_up_name_and_email('name', email)
-    app.automExercise.click_sign_up_button()
-    app.assert_that(app.automExercise.get_enter_account_information_text()).is_equal_to('ENTER ACCOUNT INFORMATION')
-    app.automExercise.fill_account_information('Mr', 'TestName', password, '1/1/1990')
-    app.automExercise.select_newsletter_and_special_offers()
-    app.automExercise.fill_address_information('FirstName', 'LastName', 'Company', 'Address', 'Address2',
-                                               'United States', 'State', 'City', '12345', '1234567890')
-    app.automExercise.create_account()
-    app.automExercise.click_continue_after_account_creation()
-    app.automExercise.click_logout()
+    Utils.create_account_with_defaults(email, password)
 
     # test_case_16_place_order_login_before_checkout
     app.automExercise.openUrl("http://automationexercise.com/")
@@ -33,7 +21,7 @@ def test_case_16_place_order_login_before_checkout(app):
     app.automExercise.click_login_signup_button()
     app.automExercise.enter_correct_email_and_password(email, password)
     app.automExercise.click_login_button()
-    app.assert_that(app.automExercise.verify_logged_in_user_display()).is_equal_to('Logged in as TestName')
+    app.assert_that(app.automExercise.verify_logged_in_user_display()).is_equal_to('Logged in as Default Name')
     app.automExercise.click_add_to_cart_on_first_product()
     app.automExercise.click_continue_shopping_button()
     app.automExercise.click_add_to_cart_on_third_product()
