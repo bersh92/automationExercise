@@ -40,6 +40,26 @@ def demonstrate_tuples():
     # Accessing tuple elements
     print("First Element:", a_tuple[0])
 
+def demonstrate_dictionaries():
+    # Dictionaries
+    print("\n=== Dictionaries ===")
+    a_dict = {'key1': 1, 'key2': "Python", 'key3': 3.14}
+    print("Original Dictionary:", a_dict)
+
+    # Adding to a dictionary
+    a_dict['key4'] = "New Element"
+    print("After Adding a New Key-Value Pair:", a_dict)
+
+    # Accessing dictionary elements
+    print("Value for 'key2':", a_dict['key2'])
+
+    # Updating an existing key's value
+    a_dict['key1'] = 100
+    print("After Updating 'key1':", a_dict)
+
+    # Removing a key-value pair
+    del a_dict['key3']
+    print("After Removing 'key3':", a_dict)
 
 def demonstrate_control_flow():
     # Control Flow - if, else
@@ -72,6 +92,7 @@ def main():
     demonstrate_variables()
     demonstrate_lists()
     demonstrate_tuples()
+    demonstrate_dictionaries()
     demonstrate_control_flow()
     demonstrate_functions()
 
