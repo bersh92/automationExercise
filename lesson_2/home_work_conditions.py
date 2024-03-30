@@ -32,3 +32,12 @@ driver.get('https://automationexercise.com/')
 categories = driver.find_elements(By.CSS_SELECTOR, 'div[class="panel-group category-products"] h4 a')
 
 for category in categories:
+    print(category.text)
+if categories:  # Перевіряємо, чи знайдено хоча б одну категорію
+    first_category = categories[0]  # Отримуємо перший елемент зі списку категорій
+    first_category.click()  # Клікаємо на першу категорію
+    print("Clicked on the first category")
+else:
+    print("No categories found")
+
+driver.quit()
