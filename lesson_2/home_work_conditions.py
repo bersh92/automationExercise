@@ -1,10 +1,34 @@
-# Steps for Test Case: Click on a Category if Present, Else Print a Message
+# Тест-кейс 2: Проверить наличие конкретной категории и кликнуть по ней
 
-# 1. Open the Automation Exercise website in a web browser.
-# 2. Navigate to the website using Selenium WebDriver.
-# 3. Identify and find the selector for the list of categories.
-# 4. Retrieve all categories using the identified selector.
-# 5. Iterate through each category in the retrieved list.
-# 6. Within the loop, use an if condition to check if the current category matches the target category name.
-#    - If it matches, click on the category element.
-#    - If there is no match, after the loop, print a message indicating the target category is not in the list of categories.
+# Шаг 1: Открыть браузер
+# Шаг 2: Зайти на сайт Automation Exercise
+# Шаг 3: Найти раздел с категориями товаров
+# Шаг 4: Просмотреть все категории в поисках конкретной, например, "Женская одежда"
+# Шаг 5: Если эта категория есть, кликнуть по ней, чтобы перейти к товарам этой категории
+# Шаг 6: Если этой категории нет, вывести сообщение, что такой категории не существует на сайте
+# Шаг 7: Закрыть браузер
+
+# Пример кода (предполагается, что студенты допишут его):
+# from selenium import webdriver
+# driver = webdriver.Chrome()
+# driver.get("URL сайта")
+# categories = driver.find_elements_by_css_selector("селектор списка категорий")
+# category_found = False
+# for category in categories:
+#     if category.text == "Женская одежда":
+#         category.click()
+#         category_found = True
+#         break
+# if not category_found:
+#     print("Категория 'Женская одежда' не найдена.")
+# driver.quit()
+
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get('https://automationexercise.com/')
+categories = driver.find_elements(By.CSS_SELECTOR, 'div[class="panel-group category-products"] h4 a')
+
+for category in categories:

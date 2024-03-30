@@ -19,12 +19,16 @@ email_field.send_keys("test@example.com")
 
 subscribe_button = driver.find_element(By.CSS_SELECTOR, "#subscribe")
 subscribe_button.click()
-time.sleep(3)
+time.sleep(0.5)
 # Assume there's an element that shows up for a successful subscription
 # Adjust the CSS selector to the actual success message on your webpage
+
+
 success_message = driver.find_element(By.CSS_SELECTOR, 'div[class="alert-success alert"]')
 
-if success_message.text == 'You have been successfully subscribed!':
+text_elementa_bliad = success_message.text
+
+if text_elementa_bliad == 'You have been successfully subscribed!':
     print("Subscription successful.")
 else:
     print("Subscription failed or no confirmation received.")

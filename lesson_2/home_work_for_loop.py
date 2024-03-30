@@ -1,8 +1,17 @@
-# Steps for Test Case: Print All Brand Names from Automation Exercise Website
+# Тест-кейс 1: Вывести список всех брендов
 
-# 1. Open the Automation Exercise website in a web browser.
-# 2. Navigate to the website using Selenium WebDriver.
-# 3. Find the selector for the list of brands.
-# 4. Use a for loop to iterate over the brand elements found using the selector.
-# 5. Inside the loop, extract the brand name from each element and add it to a list.
-# 6. Print the list of brand names.
+# Шаг 1: Открыть браузер
+# Шаг 2: Зайти на сайт Automation Exercise
+# Шаг 3: Найти раздел, где перечислены все бренды
+# Шаг 4: Пройтись по списку брендов и собрать их названия
+# Шаг 5: Вывести на экран список всех названий брендов
+# Шаг 6: Закрыть браузер
+
+# Пример кода (предполагается, что студенты допишут его):
+# from selenium import webdriver
+# driver = webdriver.Chrome()
+# driver.get("URL сайта")
+# brands = driver.find_elements_by_css_selector("селектор списка брендов")
+# for brand in brands:
+#     print(brand.text)
+# driver.quit()
