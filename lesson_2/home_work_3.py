@@ -15,3 +15,17 @@
 # button_texts = [button.text for button in navigation_buttons]
 # print(button_texts)
 # driver.quit()
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get('https://automationexercise.com/')
+navigation_buttons = driver.find_elements(By.CSS_SELECTOR, 'ul[class="nav navbar-nav"] li a')
+list_navigation_buttons = []
+for navigation_button in navigation_buttons:
+    list_navigation_buttons.append(navigation_button.text)
+
+print(list_navigation_buttons)
+
+driver.quit()

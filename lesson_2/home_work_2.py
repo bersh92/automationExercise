@@ -1,4 +1,5 @@
 # Тест-кейс 1: Вывести список всех брендов
+from selenium.webdriver.chrome import webdriver
 
 # Шаг 1: Открыть браузер
 # Шаг 2: Зайти на сайт Automation Exercise
@@ -15,3 +16,15 @@
 # for brand in brands:
 #     print(brand.text)
 # driver.quit()
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get('https://automationexercise.com/')
+brands = driver.find_elements(By.CSS_SELECTOR, 'div[class="brands-name"] a')
+
+for brand in brands:
+    print(brand.text)
+
+driver.quit()

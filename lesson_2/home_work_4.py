@@ -1,4 +1,5 @@
 # Тест-кейс 2: Проверка наличия элемента с названием, начинающимся на "LoggedInS", и клик по кнопке "Logout"
+import time
 
 # Шаг 1: Открыть браузер.
 # Шаг 2: Зайти на сайт Automation Exercise.
@@ -20,6 +21,38 @@
 #         logout_button.click()
 #         logged_in_element_found = True
 #         break
-# if not logged_in_element_found:
+# if logged_in_element_found == False:
 #     print("Пользователь не залогинен.")
 # driver.quit()
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get('https://automationexercise.com/')
+signup_login = driver.find_element(By.CSS_SELECTOR, 'a[href="/login"]')
+signup_login.click()
+first_element = driver.find_element(By.CSS_SELECTOR, 'form[action="/login"] input[type="email"]')
+email = first_element.send_keys("email@jhf.com")
+second_element = driver.find_element(By.CSS_SELECTOR, 'form[action="/login"] input[type="password"]')
+password = second_element.send_keys('password')
+login_button = driver.find_element(By.CSS_SELECTOR, 'button[data-qa="login-button"]')
+login_button.click()
+
+navigation_buttons = driver.find_elements(By.CSS_SELECTOR, 'ul[class="nav navbar-nav"] li a')
+
+logout_button_value = "not found"
+
+for navigation_button in navigation_buttons:
+    print(navigation_button.text)
+    if navigation_button.text.startswith("Logged in as"):
+        logout_button = driver.find_element(By.CSS_SELECTOR, 'a[href="/logout"]')
+        logout_button.click()
+        print("Logout found and clicked")
+        logout_button_value = "found"
+        break
+
+if logout_button_value == "not found":
+    print('Logout_not_found')
+
+driver.quit()
